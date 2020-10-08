@@ -24,7 +24,7 @@ describe('TitleComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('displays title', () => {
+  it('display title', () => {
     const title = fixture.debugElement.query(By.css('[data-test=title]'));
 
     expect(title.nativeElement.textContent).toEqual(component.title);

@@ -33,13 +33,13 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('displays title', () => {
+  it('display title', () => {
     const title = fixture.debugElement.query(By.directive(TitleComponent));
 
     expect(title).toBeTruthy();
   });
 
-  it('displays url form', () => {
+  it('display url form', () => {
     const urlForm = fixture.debugElement.query(By.directive(UrlFormComponent));
 
     expect(urlForm).toBeTruthy();

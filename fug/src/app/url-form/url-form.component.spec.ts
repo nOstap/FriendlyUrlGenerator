@@ -1,17 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs';
+import { UrlGeneratorService } from '../services/url-generator.service';
 import { UrlFormComponent } from './url-form.component';
+jest.mock('../services/url-generator.service');
 
 
 describe('UrlFormComponent', () => {
   let component: UrlFormComponent;
   let fixture: ComponentFixture<UrlFormComponent>;
+  let urlGenerator: UrlGeneratorService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,6 +25,9 @@ describe('UrlFormComponent', () => {
         MatInputModule,
         MatButtonModule,
       ],
+      providers: [
+        UrlGeneratorService
+      ],
       declarations: [UrlFormComponent]
     })
       .compileComponents();
@@ -31,6 +37,7 @@ describe('UrlFormComponent', () => {
     jest.clearAllMocks();
     fixture = TestBed.createComponent(UrlFormComponent);
     component = fixture.componentInstance;
+    urlGenerator = TestBed.inject(UrlGeneratorService);
     fixture.detectChanges();
   });
 
@@ -38,7 +45,7 @@ describe('UrlFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('display form field', () => {
+  it(' form field', () => {
     const urlForm = fixture.debugElement.query(By.directive(MatFormField));
 
     expect(urlForm).toBeTruthy();
@@ -57,27 +64,42 @@ describe('UrlFormComponent', () => {
     expect(inputField).toBeTruthy();
   });
 
-  describe('Generate Url Button', () => {
-    it('display', () => {
-      const button = fixture.debugElement.query(By.css('[mat-flat-button]'));
+  it('display submit button', () => {
+    const button = fixture.debugElement.query(By.css('[mat-flat-button]'));
 
-      expect(button).toBeTruthy();
-      expect(button.nativeElement.textContent).toEqual(component.submitButtonText);
-      expect(button.attributes.color).toEqual('primary');
-    });
+    expect(button).toBeTruthy();
+    expect(button.nativeElement.textContent).toEqual(component.submitButtonText);
+    expect(button.attributes.color).toEqual('primary');
+  });
 
-    it('clicks', () => {
+  describe('Generate button clickm', () => {
+    it('submits provided long url', () => {
       const button = fixture.debugElement.query(By.css('[mat-flat-button]'));
       const submitUrlSpy = jest.spyOn(component, 'submitUrl');
+      const makeFriendlyUrlSpy = jest.spyOn(urlGenerator, 'makeFriendlyUrl');
 
       button.nativeElement.click();
 
       expect(submitUrlSpy).toHaveBeenCalledTimes(1);
+      expect(makeFriendlyUrlSpy).toHaveBeenCalledTimes(1);
+      expect(makeFriendlyUrlSpy).toHaveBeenCalledWith(component.urlFormControl.value);
+    });
+
+    it('display generated url inside input field', () => {
+      const friendlyUrl$ = new Observable<string>(sub => {
+        sub.next('friendlyUrl');
+        sub.complete();
+      });
+      const inputField = fixture.debugElement.query(By.directive(MatFormField)).query(By.directive(MatInput));
+      jest.spyOn(urlGenerator, 'makeFriendlyUrl').mockReturnValue(friendlyUrl$);
+
+      component.submitUrl();
+      fixture.detectChanges();
+
+      expect(inputField.nativeElement.value).toEqual('friendlyUrl');
     });
 
   });
 
-
-
-
 });
+

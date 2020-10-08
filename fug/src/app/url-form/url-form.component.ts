@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { UrlGeneratorService } from '../services/url-generator.service';
 
 @Component({
   selector: 'fug-url-form',
@@ -11,14 +12,16 @@ export class UrlFormComponent implements OnInit {
   readonly labelText = 'Paste long url and generate friendly one';
   readonly submitButtonText = 'Generate';
 
-  constructor() { }
+  constructor(private readonly urlGenerator: UrlGeneratorService) { }
 
   ngOnInit(): void {
     this.urlFormControl = new FormControl(null);
   }
 
   submitUrl(): void {
-    throw new Error('Method not implemented.');
+    this.urlGenerator.makeFriendlyUrl(this.urlFormControl.value).subscribe((response) => {
+      this.urlFormControl.setValue(response);
+    });
   }
 
 }
