@@ -140,12 +140,14 @@
       true,
       "attribute",
       "app",
+      "fug",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
       "app",
+      "fug",
       "kebab-case"
     ]
   }
