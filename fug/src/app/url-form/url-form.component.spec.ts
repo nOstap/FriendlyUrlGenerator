@@ -5,7 +5,7 @@ import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/fo
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscriber } from 'rxjs';
 import { UrlGeneratorService } from '../services/url-generator.service';
 import { UrlFormComponent } from './url-form.component';
 jest.mock('../services/url-generator.service');
@@ -111,6 +111,27 @@ describe('UrlFormComponent', () => {
       component.submitUrl();
 
       expect(makeFriendlyUrlSpy).not.toHaveBeenCalled();
+    });
+
+    it('disables the button while generating a url', () => {
+      let sub: Subscriber<string>;
+      const friendlyUrl$ = new Observable<string>(s => sub = s);
+      const button = fixture.debugElement.query(By.css('[mat-flat-button]'));
+      jest.spyOn(urlGenerator, 'makeFriendlyUrl').mockReturnValue(friendlyUrl$);
+      component.urlFormControl.setValue('foo.co.uk');
+
+      expect(button.nativeElement.disabled).toEqual(false);
+
+      button.nativeElement.click();
+      fixture.detectChanges();
+
+      expect(button.nativeElement.disabled).toEqual(true);
+
+      sub.next('friendlyUrl');
+      sub.complete();
+      fixture.detectChanges();
+
+      expect(button.nativeElement.disabled).toEqual(false);
     });
 
   });

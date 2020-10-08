@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { from } from 'rxjs';
 import { UrlGeneratorService } from '../services/url-generator.service';
 import { URL_REGEXP } from '../constants';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'fug-url-form',
@@ -11,8 +12,9 @@ import { URL_REGEXP } from '../constants';
 })
 export class UrlFormComponent implements OnInit {
   urlFormControl: FormControl;
-  readonly labelText = 'Paste long url and generate friendly one';
+  labelText = 'Paste long url and generate friendly one';
   readonly submitButtonText = 'Generate';
+  @ViewChild('submitButton') submitButton: HTMLButtonElement;
 
   constructor(private readonly urlGenerator: UrlGeneratorService) { }
 
@@ -28,8 +30,16 @@ export class UrlFormComponent implements OnInit {
       return;
     }
 
-    this.urlGenerator.makeFriendlyUrl(this.urlFormControl.value).subscribe((response) => {
-      this.urlFormControl.setValue(response);
+    this.submitButton.disabled = true;
+
+    this.urlGenerator.makeFriendlyUrl(this.urlFormControl.value).subscribe({
+      next: (response) => {
+        this.urlFormControl.setValue(response);
+        this.submitButton.disabled = false;
+      },
+      error: () => {
+        this.submitButton.disabled = false;
+      },
     });
   }
 
