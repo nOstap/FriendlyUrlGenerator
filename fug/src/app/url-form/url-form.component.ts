@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
+import { from } from 'rxjs';
 import { UrlGeneratorService } from '../services/url-generator.service';
+import { URL_REGEXP } from '../constants';
 
 @Component({
   selector: 'fug-url-form',
@@ -15,10 +17,17 @@ export class UrlFormComponent implements OnInit {
   constructor(private readonly urlGenerator: UrlGeneratorService) { }
 
   ngOnInit(): void {
-    this.urlFormControl = new FormControl(null);
+    this.urlFormControl = new FormControl('', [
+      Validators.required,
+      Validators.pattern(URL_REGEXP),
+    ]);
   }
 
   submitUrl(): void {
+    if (this.urlFormControl.invalid) {
+      return;
+    }
+
     this.urlGenerator.makeFriendlyUrl(this.urlFormControl.value).subscribe((response) => {
       this.urlFormControl.setValue(response);
     });

@@ -1,6 +1,8 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { fingerprint } from '@angular/compiler/src/i18n/digest';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By, Title } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
@@ -13,6 +15,10 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        HttpClientModule,
+      ],
       declarations: [
         AppComponent,
         TitleComponent,

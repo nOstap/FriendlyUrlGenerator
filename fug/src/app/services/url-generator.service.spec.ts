@@ -10,9 +10,8 @@ describe('UrlGeneratorService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
+      imports: [
         HttpClientModule,
-        HttpClient
       ]
     });
     service = TestBed.inject(UrlGeneratorService);

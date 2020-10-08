@@ -5,7 +5,7 @@ import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/fo
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UrlGeneratorService } from '../services/url-generator.service';
 import { UrlFormComponent } from './url-form.component';
 jest.mock('../services/url-generator.service');
@@ -77,6 +77,7 @@ describe('UrlFormComponent', () => {
       const button = fixture.debugElement.query(By.css('[mat-flat-button]'));
       const submitUrlSpy = jest.spyOn(component, 'submitUrl');
       const makeFriendlyUrlSpy = jest.spyOn(urlGenerator, 'makeFriendlyUrl');
+      component.urlFormControl.setValue('foo.co.uk');
 
       button.nativeElement.click();
 
@@ -92,11 +93,24 @@ describe('UrlFormComponent', () => {
       });
       const inputField = fixture.debugElement.query(By.directive(MatFormField)).query(By.directive(MatInput));
       jest.spyOn(urlGenerator, 'makeFriendlyUrl').mockReturnValue(friendlyUrl$);
+      component.urlFormControl.setValue('foo.co.uk');
 
       component.submitUrl();
       fixture.detectChanges();
 
       expect(inputField.nativeElement.value).toEqual('friendlyUrl');
+    });
+
+    test.each([
+      [''],
+      ['invalid@format'],
+      ['invalid']
+    ])('submitting %s url takes no action', (url) => {
+      const makeFriendlyUrlSpy = jest.spyOn(urlGenerator, 'makeFriendlyUrl');
+
+      component.submitUrl();
+
+      expect(makeFriendlyUrlSpy).not.toHaveBeenCalled();
     });
 
   });
