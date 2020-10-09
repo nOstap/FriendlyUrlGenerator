@@ -11,7 +11,7 @@ export class AppController {
   ) { }
 
   @Post('url-generator/friendly')
-  async createFriendlyUrl(@Body() sourceUrl: string): Promise<string> {
+  async createFriendlyUrl(@Body('sourceUrl') sourceUrl: string): Promise<string> {
     const exists = await this.urlPairService.findBySourceUrl(sourceUrl);
     if (exists) {
       return exists.friendlyUrl;

@@ -21,12 +21,12 @@ export class UrlGeneratorService implements OnModuleInit {
    * @param sourceUrl 
    * @param deep - how many adjectives to generate (increases friendly url complexity) (3 adjectives as default)
    */
-  makeFriendlyUrl(sourceUrl: string, deep: number = 3): Promise<string> {
+    makeFriendlyUrl(sourceUrl: string, deep: number = 3): Promise<string> {
     const rng = seedrandom(sourceUrl);
-    console.log(this._adjectives, rng);
     const randomAdjectives = Array(deep).fill('').map(() => this._adjectives[Math.floor(rng() * this._adjectives.length)]);
     const randomNoun = this._nouns[Math.floor(rng() * this._nouns.length)];
     const slug = `${randomAdjectives.join('-')}-${randomNoun}`;
+    console.log(sourceUrl);
     return Promise.resolve(`${os.hostname()}/${slug}`);
   }
 }
