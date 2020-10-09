@@ -10,7 +10,9 @@ export class UrlGeneratorService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  makeFriendlyUrl(longUrl: string): Observable<string> {
-    return this.httpClient.post<string>(`${environment.apiUrl}/url-generator/friendly`, longUrl);
+  makeFriendlyUrl(sourceUrl: string): Observable<string> {
+    return this.httpClient.post<string>(`${environment.apiUrl}/url-generator/friendly`, {
+      sourceUrl,
+    });
   }
 }
