@@ -30,7 +30,10 @@ describe('UrlGeneratorService', () => {
         expect(response).toEqual('friendlyUrl');
       });
       expect(postSpy).toHaveBeenCalledTimes(1);
-      expect(postSpy).toHaveBeenCalledWith(`${environment.apiUrl}/url-generator/friendly`, { sourceUrl: 'longUrl'});
+      expect(postSpy).toHaveBeenCalledWith(
+        `${environment.apiUrl}/url-generator/friendly`,
+        { sourceUrl: 'longUrl' },
+        { responseType: 'text' });
     });
   });
 });
