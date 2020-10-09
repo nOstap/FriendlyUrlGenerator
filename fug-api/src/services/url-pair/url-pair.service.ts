@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UrlPair } from 'src/entities/url-pair.entity';
-import { UrlWithParsedQuery } from 'url';
+import { Repository } from 'typeorm';
+import { Url, UrlWithParsedQuery } from 'url';
 
 @Injectable()
 export class UrlPairService {
 
+    constructor(@InjectRepository(UrlPair) private readonly urlPairRepository: Repository<UrlPair>) {}
+
     findBySourceUrl(sourceUrl: string): Promise<UrlPair> {
-        throw new Error("not implmented");
+        return this.urlPairRepository.findOne({ sourceUrl });
     }
 
     create(sourceUrl: string, url: string): Promise<UrlPair> {
-        throw new Error('Method not implemented.');
+        const urlPair = new UrlPair();
+        urlPair.friendlyUrl = url;
+        urlPair.sourceUrl = sourceUrl;
+        
+        return this.urlPairRepository.save(urlPair);
     }
 }
