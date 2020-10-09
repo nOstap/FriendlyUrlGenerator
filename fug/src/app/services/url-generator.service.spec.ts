@@ -23,7 +23,7 @@ describe('UrlGeneratorService', () => {
   });
 
   describe('makeFriendlyUrl()', () => {
-    it('fetch friendly url from api', () => {
+    it('fetches friendly url from api', () => {
       const postSpy = jest.spyOn(httpClient, 'post').mockReturnValue(of('friendlyUrl'));
 
       service.makeFriendlyUrl('longUrl').subscribe((response) => {

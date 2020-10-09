@@ -45,7 +45,7 @@ describe('UrlFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it(' form field', () => {
+  it('displays form field', () => {
     const urlForm = fixture.debugElement.query(By.directive(MatFormField));
 
     expect(urlForm).toBeTruthy();
@@ -64,7 +64,7 @@ describe('UrlFormComponent', () => {
     expect(inputField).toBeTruthy();
   });
 
-  it('display submit button', () => {
+  it('displays submit button', () => {
     const button = fixture.debugElement.query(By.css('[mat-flat-button]'));
 
     expect(button).toBeTruthy();
@@ -72,7 +72,7 @@ describe('UrlFormComponent', () => {
     expect(button.attributes.color).toEqual('primary');
   });
 
-  describe('Generate button clickm', () => {
+  describe('On submit button click', () => {
     it('submits provided long url', () => {
       const button = fixture.debugElement.query(By.css('[mat-flat-button]'));
       const submitUrlSpy = jest.spyOn(component, 'submitUrl');
@@ -86,7 +86,7 @@ describe('UrlFormComponent', () => {
       expect(makeFriendlyUrlSpy).toHaveBeenCalledWith(component.urlFormControl.value);
     });
 
-    it('display generated url inside input field', () => {
+    it('displays generated url inside input field', () => {
       const friendlyUrl$ = new Observable<string>(sub => {
         sub.next('friendlyUrl');
         sub.complete();
@@ -105,8 +105,10 @@ describe('UrlFormComponent', () => {
       [''],
       ['invalid@format'],
       ['invalid']
-    ])('submitting %s url takes no action', (url) => {
+    ])('takes no action', (url) => {
       const makeFriendlyUrlSpy = jest.spyOn(urlGenerator, 'makeFriendlyUrl');
+      component.urlFormControl.setValue(url);
+      fixture.detectChanges();
 
       component.submitUrl();
 
