@@ -5,11 +5,7 @@ describe('UrlPairService', () => {
   let service: UrlPairService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UrlPairService],
-    }).compile();
-
-    service = module.get<UrlPairService>(UrlPairService);
+    service = new UrlPairService(jest.fn() as any);
   });
 
   it('should be defined', () => {

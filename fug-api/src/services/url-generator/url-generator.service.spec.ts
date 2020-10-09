@@ -15,4 +15,10 @@ describe('UrlGeneratorService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('generates fiendly url', async () => {
+    const response = await service.makeFriendlyUrl('foo');
+
+    expect(response).toBeTruthy();
+  });
 });

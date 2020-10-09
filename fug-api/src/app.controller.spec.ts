@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { UrlPair } from './entities/url-pair.entity';
 import { UrlGeneratorService } from './services/url-generator/url-generator.service';
 import { UrlPairService } from './services/url-pair/url-pair.service';
+jest.mock('./services/url-pair/url-pair.service');
 
 describe('AppController', () => {
   let appController: AppController;

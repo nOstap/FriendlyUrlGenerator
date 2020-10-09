@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UrlPair } from 'src/entities/url-pair.entity';
+import { UrlPair } from '../../entities/url-pair.entity';
 import { Repository } from 'typeorm';
-import { Url, UrlWithParsedQuery } from 'url';
 
 @Injectable()
 export class UrlPairService {
