@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { from } from 'rxjs';
-import { UrlGeneratorService } from '../services/url-generator.service';
 import { URL_REGEXP } from '../constants';
-import { MatButton } from '@angular/material/button';
+import { UrlGeneratorService } from '../services/url-generator.service';
 
 @Component({
   selector: 'fug-url-form',

@@ -4,6 +4,6 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class UrlPair {
     @PrimaryGeneratedColumn('uuid') id: string;
     @Column({ unique: true }) sourceUrl: string;
-    @Column({ unique: true }) friendlyUrl: string;
+    @Column({ unique: true }) friendlySlug: string;
 
 }

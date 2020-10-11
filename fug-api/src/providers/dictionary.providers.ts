@@ -1,7 +1,7 @@
 import { Provider } from '@nestjs/common';
 import * as lineReader from 'line-reader';
 import * as path from 'path';
-import { ADJECTIVES_DICTIONARY, NOUNS_DICTIONARY } from 'src/constants';
+import { ADJECTIVES_DICTIONARY, NOUNS_DICTIONARY } from '../constants';
 
 export interface DictionaryProviderOptions {
     filePath: string,

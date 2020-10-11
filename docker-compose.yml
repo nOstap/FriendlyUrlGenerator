@@ -1,6 +1,23 @@
 version: "3.4"
 
 services:
+  fug:
+    image: fug
+    build:
+      context: .
+      dockerfile: fug/Dockerfile
+    ports:
+      - 80:80
+  fug-api:
+    image: fug-api
+    build:
+      context: .
+      dockerfile: fug-api/Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      ADJECTIVES_PATH: src/data/english-adjectives.txt
+      NOUNS_PATH: src/data/english-nouns.txt
   db:
     image: postgres
     restart: always

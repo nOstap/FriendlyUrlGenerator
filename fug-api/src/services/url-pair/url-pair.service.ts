@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class UrlPairService {
 
-    constructor(@InjectRepository(UrlPair) private readonly urlPairRepository: Repository<UrlPair>) {}
+    constructor(@InjectRepository(UrlPair) private readonly urlPairRepository: Repository<UrlPair>) { }
 
     findBySourceUrl(sourceUrl: string): Promise<UrlPair> {
         return this.urlPairRepository.findOne({ sourceUrl });
@@ -14,9 +14,13 @@ export class UrlPairService {
 
     create(sourceUrl: string, url: string): Promise<UrlPair> {
         const urlPair = new UrlPair();
-        urlPair.friendlyUrl = url;
+        urlPair.friendlySlug = url;
         urlPair.sourceUrl = sourceUrl;
-        
+
         return this.urlPairRepository.save(urlPair);
+    }
+
+    findBySlug(friendlySlug: string): PromiseLike<UrlPair> {
+        return this.urlPairRepository.findOne({ friendlySlug });
     }
 }
