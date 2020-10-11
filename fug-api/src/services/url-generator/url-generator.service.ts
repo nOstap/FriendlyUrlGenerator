@@ -1,20 +1,16 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import * as lineReader from 'line-reader';
 import * as os from 'os';
 import * as seedrandom from 'seedrandom';
 import * as path from 'path';
+import { ADJECTIVES_DICTIONARY, NOUNS_DICTIONARY } from 'src/constants';
 
 @Injectable()
-export class UrlGeneratorService implements OnModuleInit {
-  private _adjectives: string[] = [];
-  private _nouns: string[] = [];
-
-  constructor() { }
-
-  async onModuleInit() {
-    lineReader.eachLine(path.resolve(__dirname + '../../../data/english-adjectives.txt'), line => this._adjectives.push(line));
-    lineReader.eachLine(path.resolve(__dirname + '../../../data/english-nouns.txt'), line => this._nouns.push(line));
-  }
+export class UrlGeneratorService {
+  constructor(
+    @Inject(ADJECTIVES_DICTIONARY) private readonly _adjectives: string[],
+    @Inject(NOUNS_DICTIONARY) private readonly _nouns: string[],
+  ) { }
 
   /**
    * Generates pseudo-random words basing on a source url.
