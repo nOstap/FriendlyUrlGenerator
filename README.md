@@ -13,6 +13,6 @@ docker-compose top
 docker-compose kill
 // remove stopped containers
 docker-compose rm
-// stop all contaners and remove images, volumes
+// stop all containers and remove images, volumes
 docker-compose down
 ```

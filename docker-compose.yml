@@ -18,6 +18,8 @@ services:
     environment:
       ADJECTIVES_PATH: src/data/english-adjectives.txt
       NOUNS_PATH: src/data/english-nouns.txt
+      WEB_APP_URL: localhost
+      WEB_API_URL: localhost/api
   db:
     image: postgres
     restart: always
