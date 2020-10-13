@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
-import { UrlPair } from './entities/url-pair.entity';
+import { Body, Controller, Get, Param, Post, Redirect, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateFriendlyUrlRequest } from './requests/create-friendly-url.request';
 import { UrlPairService } from './services/url-pair/url-pair.service';
 
 @Controller()
@@ -10,7 +10,9 @@ export class AppController {
   ) { }
 
   @Post('url-generator/friendly')
-  async createFriendlyUrl(@Body('sourceUrl') sourceUrl: string): Promise<string> {
+  @UsePipes(ValidationPipe)
+  async createFriendlyUrl(@Body() request: CreateFriendlyUrlRequest): Promise<string> {
+    const { sourceUrl } = request;
     let urlPair = await this.urlPairService.findBySourceUrl(sourceUrl);
 
     if (!urlPair) {
