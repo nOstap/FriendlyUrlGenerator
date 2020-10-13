@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { UrlPair } from './entities/url-pair.entity';
+import { Body, Controller, Get, Logger, NotFoundException, Param, Post, Redirect, Req, Res } from '@nestjs/common';
+import { Response } from 'express';
+import { url } from 'inspector';
 import { UrlGeneratorService } from './services/url-generator/url-generator.service';
 import { UrlPairService } from './services/url-pair/url-pair.service';
 
@@ -11,23 +12,29 @@ export class AppController {
     private urlPairService: UrlPairService,
   ) { }
 
-  @Post('url-generator/friendly')
+  @Post('api/url-generator/friendly')
   async createFriendlyUrl(@Body('sourceUrl') sourceUrl: string): Promise<string> {
     const exists = await this.urlPairService.findBySourceUrl(sourceUrl);
+
     if (exists) {
-      return exists.friendlySlug;
+      return exists.friendlyPath;
     }
 
-    const url = this.urlGenerator.makeFriendlyUrl(sourceUrl);
-    await this.urlPairService.create(sourceUrl, url);
+    let friendlyPath = this.urlGenerator.createFriendlyPath(sourceUrl);
+    await this.urlPairService.create(sourceUrl, friendlyPath);
 
-    return url;
+    return friendlyPath;
   }
 
-  @Get(':slug')
-  async getSourceUrl(@Param('slug') slug: string): Promise<string> {
-    const urlPair = await this.urlPairService.findBySlug(slug);
+  @Get(':friendlyPath')
+  @Redirect()
+  async redirectToSource(@Param('friendlyPath') friendlyPath: string): Promise<{ url: string }> {
+    const urlPair = await this.urlPairService.findByPath(friendlyPath);
 
-    return urlPair.sourceUrl;
+    if (!urlPair) {
+      return { url: `${process.env.WEB_APP_URL}/${friendlyPath}` };
+    }
+
+    return { url: urlPair.sourceUrl };
   }
 }

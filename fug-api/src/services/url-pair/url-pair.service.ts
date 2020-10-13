@@ -12,15 +12,15 @@ export class UrlPairService {
         return this.urlPairRepository.findOne({ sourceUrl });
     }
 
-    create(sourceUrl: string, url: string): Promise<UrlPair> {
-        const urlPair = new UrlPair();
-        urlPair.friendlySlug = url;
-        urlPair.sourceUrl = sourceUrl;
-
-        return this.urlPairRepository.save(urlPair);
+    create(sourceUrl: string, friendlyPath: string): Promise<UrlPair> {
+        const newUrlPair = new UrlPair({
+            sourceUrl,
+            friendlyPath
+        });
+        return this.urlPairRepository.save(newUrlPair);
     }
 
-    findBySlug(friendlySlug: string): PromiseLike<UrlPair> {
-        return this.urlPairRepository.findOne({ friendlySlug });
+    findByPath(friendlyPath: string): PromiseLike<UrlPair> {
+        return this.urlPairRepository.findOne({ friendlyPath });
     }
 }

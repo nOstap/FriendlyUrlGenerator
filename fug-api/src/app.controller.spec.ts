@@ -29,19 +29,19 @@ describe('AppController', () => {
   describe('createFriendlyUrl()', () => {
     it('returns existing friendly url', async () => {
       const existingPair = new UrlPair();
-      existingPair.friendlySlug = 'friendlyUrl';
+      existingPair.friendlyPath = 'friendlyUrl';
       jest.spyOn(urlPairService, 'findBySourceUrl').mockResolvedValue(existingPair);
 
       const response = await appController.createFriendlyUrl('existingSource');
 
-      expect(response).toEqual(existingPair.friendlySlug);
+      expect(response).toEqual(existingPair.friendlyPath);
     });
 
     it('returns new generatred url', async () => {
       const newFriendlyUrl = 'new.friendly.url';
       jest.spyOn(urlPairService, 'create').mockResolvedValue(null);
       jest.spyOn(urlPairService, 'findBySourceUrl').mockResolvedValue(null);
-      jest.spyOn(urlGenerator, 'makeFriendlyUrl').mockReturnValue(newFriendlyUrl);
+      jest.spyOn(urlGenerator, 'createFriendlyPath').mockReturnValue(newFriendlyUrl);
 
       const response = await appController.createFriendlyUrl('foo');
 
@@ -50,33 +50,42 @@ describe('AppController', () => {
 
     it('presists newly generate url pair', async () => {
       const newUrlPair = new UrlPair();
-      newUrlPair.friendlySlug = 'new.friendly.url';
+      newUrlPair.friendlyPath = 'new.friendly.url';
       newUrlPair.sourceUrl = 'new.friendly.url';
       newUrlPair.id = 'fooId';
       jest.spyOn(urlPairService, 'findBySourceUrl').mockResolvedValue(null);
       const createSpy = jest.spyOn(urlPairService, 'create').mockResolvedValue(newUrlPair);
-      jest.spyOn(urlGenerator, 'makeFriendlyUrl').mockReturnValue(newUrlPair.sourceUrl);
+      jest.spyOn(urlGenerator, 'createFriendlyPath').mockReturnValue(newUrlPair.sourceUrl);
 
       await appController.createFriendlyUrl(newUrlPair.sourceUrl);
 
       expect(createSpy).toHaveBeenCalledTimes(1);
-      expect(createSpy).toHaveBeenCalledWith(newUrlPair.sourceUrl, newUrlPair.friendlySlug);
+      expect(createSpy).toHaveBeenCalledWith(newUrlPair.sourceUrl, newUrlPair.friendlyPath);
     });
 
   });
 
   describe('getSourceUrl()', () => {
-    it('responds with source url', async () => {
-      const urlPair = new UrlPair();
-      urlPair.sourceUrl = 'sourceUrl';
-      jest.spyOn(urlPairService, 'findBySlug').mockResolvedValue(urlPair);
+    it('redirects to source url', async () => {
+      const urlPair = new UrlPair({ sourceUrl: 'bar' });
+      jest.spyOn(urlPairService, 'findByPath').mockResolvedValue(urlPair);
 
-      const response = await appController.getSourceUrl('foo');
+      const response = await appController.redirectToSource('foo');
 
-      expect(response).toEqual(urlPair.sourceUrl);
+      expect(response).toEqual({ url: urlPair.sourceUrl });
+    });
+
+    it('redirects to web app when pair not found', async () => {
+      jest.spyOn(urlPairService, 'findByPath').mockResolvedValue(null);
+      process.env.WEB_APP_URL = 'bar';
+
+      const response = await appController.redirectToSource('foo');
+
+      expect(response).toEqual({ url: 'bar/foo' });
     });
 
   });
+  
 
 
 

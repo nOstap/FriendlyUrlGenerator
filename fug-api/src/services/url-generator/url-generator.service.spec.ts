@@ -28,7 +28,7 @@ describe('UrlGeneratorService', () => {
   });
 
   it('generates fiendly url', async () => {
-    const response = await service.makeFriendlyUrl('foo');
+    const response = await service.createFriendlyPath('foo');
 
     expect(response).toBe('adjective-adjective-adjective-noun');
   });
