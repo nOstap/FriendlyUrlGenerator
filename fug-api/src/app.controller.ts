@@ -1,14 +1,10 @@
-import { Body, Controller, Get, Logger, NotFoundException, Param, Post, Redirect, Req, Res } from '@nestjs/common';
-import { Response } from 'express';
-import { url } from 'inspector';
-import { UrlGeneratorService } from './services/url-generator/url-generator.service';
+import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
 import { UrlPairService } from './services/url-pair/url-pair.service';
 
 @Controller()
 export class AppController {
 
   constructor(
-    private urlGenerator: UrlGeneratorService,
     private urlPairService: UrlPairService,
   ) { }
 
@@ -20,10 +16,9 @@ export class AppController {
       return exists.friendlyPath;
     }
 
-    let friendlyPath = this.urlGenerator.createFriendlyPath(sourceUrl);
-    await this.urlPairService.create(sourceUrl, friendlyPath);
+    const urlPair = await this.urlPairService.create(sourceUrl);
 
-    return friendlyPath;
+    return urlPair.friendlyPath;
   }
 
   @Get(':friendlyPath')

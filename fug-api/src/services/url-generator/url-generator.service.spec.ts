@@ -27,7 +27,7 @@ describe('UrlGeneratorService', () => {
     expect(service).toBeDefined();
   });
 
-  it('generates fiendly url', async () => {
+  it('generates friendly url', async () => {
     const response = await service.createFriendlyPath('foo');
 
     expect(response).toBe('adjective-adjective-adjective-noun');

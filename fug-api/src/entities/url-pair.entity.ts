@@ -17,7 +17,7 @@ export class UrlPair {
     }
 
     /**
-     * Adds http:// to url if missing, browser will automaticly redirect to https:// if required.
+     * Adds http:// to url if missing, browser will automatically redirect to https:// if required.
      * @param sourceUrl 
      */
     public static createSourceUrl(sourceUrl: string) {
