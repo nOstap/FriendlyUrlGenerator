@@ -1,8 +1,8 @@
 FROM node:12 as build
 WORKDIR /app
-COPY package*.json /app/
+COPY fug/package*.json /app/
 RUN npm install
-COPY ./ /app/
+COPY ./fug /app/
 ARG configuration=production
 RUN npm run build -- --output-path=./dist/out --configuration $configuration
 

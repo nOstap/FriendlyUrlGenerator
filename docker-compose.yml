@@ -8,6 +8,8 @@ services:
       dockerfile: fug/Dockerfile
     ports:
       - 80:80
+    depends_on: 
+      - fug-api
   fug-api:
     image: fug-api
     build:
@@ -20,6 +22,8 @@ services:
       NOUNS_PATH: src/data/english-nouns.txt
       WEB_APP_URL: localhost
       WEB_API_URL: localhost/api
+    depends_on:
+      - db
   db:
     image: postgres
     restart: always

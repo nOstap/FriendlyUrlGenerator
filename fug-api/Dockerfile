@@ -1,12 +1,12 @@
 FROM node:12.13-alpine As development
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json ./
+COPY fug-api/package*.json /app/
 
-RUN npm install --only=development
+RUN npm install
 
-COPY . .
+COPY ./fug-api /app/
 
 RUN npm run build
 
@@ -15,14 +15,16 @@ FROM node:12.13-alpine as production
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json ./
+COPY fug-api/package*.json /app/
 
 RUN npm install --only=production
 
-COPY . .
+COPY ./fug-api /app/
 
-COPY --from=development /usr/src/app/dist ./dist
+# Copy Data Folder
+COPY --from=development /app/dist ./dist
+COPY --from=development /app/src/data ./dist/data
 
 CMD ["node", "dist/main"]
