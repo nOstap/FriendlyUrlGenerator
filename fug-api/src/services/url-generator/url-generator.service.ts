@@ -14,7 +14,7 @@ export class UrlGeneratorService {
    * @param sourceUrl 
    * @param deep - how many adjectives to generate (increases friendly url complexity) (3 adjectives as default)
    */
-    createFriendlyPath(sourceUrl: string, deep: number = 3): string {
+  createFriendlyPath(sourceUrl: string, deep: number = 3): string {
     const rng = seedrandom(sourceUrl);
     const randomAdjectives = Array(deep).fill('').map(() => this._adjectives[Math.floor(rng() * this._adjectives.length)]);
     const randomNoun = this._nouns[Math.floor(rng() * this._nouns.length)];

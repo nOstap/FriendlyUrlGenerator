@@ -8,15 +8,23 @@ export class UrlPair {
 
     constructor(config?: Partial<UrlPair>) {
         if (typeof (config?.sourceUrl) === 'string') {
-            if (!config.sourceUrl.includes('https://')) {
-                this.sourceUrl = `https://${config.sourceUrl}`
-            } else {
-                this.sourceUrl = config.sourceUrl;
-            }
+            this.sourceUrl = UrlPair.createSourceUrl(config.sourceUrl);
         }
 
         if (typeof config?.friendlyPath === 'string') {
             this.friendlyPath = config.friendlyPath;
+        }
+    }
+
+    /**
+     * Adds http:// to url if missing, browser will automaticly redirect to https:// if required.
+     * @param sourceUrl 
+     */
+    public static createSourceUrl(sourceUrl: string) {
+        if (/^(?:http(s)?:\/\/)/.test(sourceUrl)) {
+            return sourceUrl;
+        } else {
+            return `http://${sourceUrl}`;
         }
     }
 }
