@@ -1,4 +1,3 @@
-import { ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { UrlPair } from './entities/url-pair.entity';
@@ -23,6 +22,7 @@ describe('AppController', () => {
 
     appController = app.get<AppController>(AppController);
     urlPairService = app.get<UrlPairService>(UrlPairService);
+    process.env.WEB_API_URL = 'api';
   });
 
   describe('createFriendlyUrl()', () => {
@@ -33,10 +33,10 @@ describe('AppController', () => {
 
       const response = await appController.createFriendlyUrl('existingSource');
 
-      expect(response).toEqual(existingPair.friendlyPath);
+      expect(response).toEqual(`api/${existingPair.friendlyPath}`);
     });
 
-    it('create new url pair', async () => {
+    it('create new friendly url', async () => {
       const newUrlPair = new UrlPair();
       newUrlPair.sourceUrl = 'foo';
       newUrlPair.friendlyPath = 'bar';
@@ -47,7 +47,7 @@ describe('AppController', () => {
 
       expect(createSpy).toHaveBeenCalledTimes(1);
       expect(createSpy).toHaveBeenCalledWith(newUrlPair.sourceUrl);
-      expect(response).toEqual(newUrlPair.friendlyPath);
+      expect(response).toEqual(`api/${newUrlPair.friendlyPath}`);
     });
     
   });
