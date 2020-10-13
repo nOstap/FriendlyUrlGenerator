@@ -34,6 +34,9 @@ function loadDictionary(filePath: string): Promise<string[]> {
         lineReader.eachLine(path.resolve(filePath), (line, last) => {
             dictionary.push(line);
             if (last) {
+                if (!dictionary.length) {
+                    reject(`Dictionary cannot be loaded from path: ${filePath}`);
+                }
                 resolve(dictionary);
             }
         });

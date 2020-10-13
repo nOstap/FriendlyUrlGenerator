@@ -8,7 +8,7 @@ export class AppController {
     private urlPairService: UrlPairService,
   ) { }
 
-  @Post('api/url-generator/friendly')
+  @Post('url-generator/friendly')
   async createFriendlyUrl(@Body('sourceUrl') sourceUrl: string): Promise<string> {
     const exists = await this.urlPairService.findBySourceUrl(sourceUrl);
 
