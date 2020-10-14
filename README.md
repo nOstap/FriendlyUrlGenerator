@@ -1,3 +1,5 @@
+<p style="color: red">Docker compose doesn't have reverse proxy yet, start apps individually please.</p>
+
 ```js
 // create and start containers
 docker-compose up
